@@ -1,54 +1,49 @@
 <?php
+// =======================================================================================
+// == ABOUT ==============================================================================
+// =======================================================================================
+/*
 
+Index.php CMS - lightweight PHP Based CMS based on Twitter Bootstrap and distributed in one PHP file.
+
+Admin page: ?page=admin&pass=admin
+Twitter Bootstrap Examples:http://twitter.github.io/bootstrap/getting-started.html#examples
+GitHub: https://github.com/SergeyGu/index.phpCMS/blob/master/index.php
+
+*/
 // =======================================================================================
 // == CONFIGURATION ======================================================================
 // =======================================================================================
 
-// DO NOT REMOVE THIS LINE! MARKER:<CONFIG>
-
-
+// DO NOT REMOVE OR EDIT THIS LINE! MARKER:<CONFIG>
 $aConfig = array (
-  'domain' => 'test.test.tst',
-  'project_name' => 'index.php CMS - Test site 5',
-  'company_name' => 'MVP Lovers Inc',
-  'email' => 'e@mail',
+  'domain' => 'indexphp.org',
+  'project_name' => 'index.PHP CMS v0.2',
+  'company_name' => 'IndexPHP.ORG CMS',
+  'email' => 'guschin.sergey@gmail.com',
   'admin_password' => 'admin',
   'members_login' => 'DUMMY',
   'dummy_message' => '<h1>Большое вам спасибо!</h1><br>За интерес к нашим функциям.<br><br>К сожалению в данный момент данный функционал в процессе разработки,но мы обязательно добавим его в ближайшее время.<br><br>',
+  'counters' => '<script>  (function(i,s,o,g,r,a,m){i[\'GoogleAnalyticsObject\']=r;i[r]=i[r]||function(){  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)  })(window,document,\'script\',\'//www.google-analytics.com/analytics.js\',\'ga\');  ga(\'create\', \'UA-39949692-3\', \'indexphp.org\');  ga(\'send\', \'pageview\');</script>',
+  'social_buttons' => '<script type="text/javascript">(function() { 	if (window.pluso)if (typeof window.pluso.start == "function") return; var d = document, s = d.createElement(\'script\'), g = \'getElementsByTagName\';	s.type = \'text/javascript\'; s.charset=\'UTF-8\'; s.async = true; s.src = (\'https:\' == window.location.protocol ? \'https\' : \'http\')  + \'://share.pluso.ru/pluso-like.js\';	var h=d[g](\'head\')[0] || d[g](\'body\')[0];h.appendChild(s);})();	</script>	<div class="pluso" data-options="medium,square,line,horizontal,counter,theme=04" data-services="vkontakte,odnoklassniki,facebook,twitter,google,moimir,email,print" data-background="#ebebeb"></div>',
 );
-// DO NOT REMOVE THIS LINE! MARKER:</CONFIG>
 
-/*
-
-'members_login' // TRUE - , FALSE, 'DUMMY' - Пользователь видет возможность залогинится, 
-но при клике возникает 'dummy_message' текст и событие падает в статистику под именем "User"
-
-*/
+//MARKER:</CONFIG> DO NOT REMOVE OR EDIT THIS LINE! 
 
 $aConfigHelp = array(
-
-	'domain' => array('Доменное имя', 'Доменное имя, на котором вашего проекта testtest.com'),
+	'domain' => array('Доменное имя', 'Доменное имя, на котором располагается ваш проекта testtest.com'),
 	'project_name' => array('Название проекта', 'Название проекта, будет отображаться в том числе в левом верхнем углу и в названии вкладки'),
 	'company_name' => array('Название компании/автора', 'Можно указать авторство проекта - будет отображаться в подвале'),
 	'email' => array('Email', 'Email для связи с вами, куда будут уходить отправленные пользователями вопросы со страницы контакты'),
 	'admin_password' => array('Административный пароль', 'Пароль для доступа к этой странице и статистике'),
-
-	//-- SOCIAL ----------------------------------------------------
-
-	'social_buttons' => array('Социальные кнопки', 'Включить или отключить кнопки социальных сетей для вашего проекта', 'checkbox'),
-
-	//-- MEMBERS ---------------------------------------------------
-
+	'social_buttons' => array('Социальные кнопки', 'Код кнопок социальных сетей для вашего проекта, например Pluso.ru или AddThis.com','textarea'),
 	'members_login' => array('Пользовательская зона', 'Включить или отключить возможность пользователям авторизоваться на сайт. 
 				При установке значения DUMMY возможность логина будет отображаться, но при нажатии на нее вызовется стандартная 
 				функция-заглушка и количество кликов можно будет отследить по идентификатору "member"', 'select', 
 				array('Включена' => true, 'Выключена' => false, 'Заглушка' => 'DUMMY')),
-
-	//-- MESSAGES ---------------------------------------------------
-
 	'dummy_message' => array('Текст окна-заглушки', 'Текст, возникающий на сайте при обращении к функциям, которых еще нет и которые
 				закрыты функциями-заглушками', 'textarea'),
-
+	'counters' => array('Внешние счетчики', 'Сюда можно добавить код внешних счетчиков, например Google Analytics или LiveInternet', 'textarea'),
 );
 
 // =======================================================================================
@@ -60,12 +55,6 @@ $aPages = array(
 	'Видео' => 'DUMMY',
 	'Обратная связь' => 'contacts'
 );
-
-// =======================================================================================
-// == COUNTERS ===========================================================================
-// =======================================================================================
-
-$counters = '';
 
 // =======================================================================================
 // == DATABASE FUNCTIONS =================================================================
@@ -133,17 +122,19 @@ if(!empty($_REQUEST['stat']) && !empty($_REQUEST['id'])){
 				}
 			}
 			
+			$strStart = 'MARKER:<CONFIG>';
+			$strEnd = '//MARKER:</CONFIG>';
 			$selfContent = file_get_contents(__FILE__);
-			$pos1=stripos($selfContent, 'MARKER:<CONFIG>');
-			$pos2=stripos($selfContent, 'MARKER:</CONFIG>');
+			$pos1=stripos($selfContent, $strStart);
+			$pos2=stripos($selfContent, $strEnd);
 			//echo $pos1.' '.$pos2;
-			$newContent = substr($selfContent, 0, $pos1 + 17);
+			$newContent = substr($selfContent, 0, $pos1 + strlen($strStart));
 			$newContent .= "\n".'$aConfig = '.var_export($aNewConfig, 1).";\n";
-			$newContent .= substr($selfContent, $pos2-28);
+			$newContent .= substr($selfContent, $pos2-1);
 			copy(__FILE__, __FILE__.'.bak');
 			file_put_contents(__FILE__, $newContent);
 			echo '<html><body>Saving...<script>window.location.href = "'.basename(__FILE__).
-				'?page=admin&pass='.$_REQUEST['pass'].'&rnd='.rand(1,20).'";</script></body></html>';
+				'?page=admin&pass='.$_REQUEST['pass']/*.'&rnd='.rand(1,20)*/.'";</script></body></html>';
 			exit();
 			
 
@@ -246,7 +237,7 @@ foreach($aConfig as $key => $value){
 // =======================================================================================
 
 function showPage(){ 
-	global $aConfig, $aPages, $currentPage, $counters;
+	global $aConfig, $aPages, $currentPage;
 ?><!DOCTYPE html>
 <html>
   <head>
@@ -257,8 +248,7 @@ function showPage(){
     <meta name="author" content="">
 
     <!-- Le styles -->
-<!--    <link href="http://twitter.github.io/bootstrap/assets/css/bootstrap.css" rel="stylesheet"> -->
-    <link href="http://raw.github.com/thomaspark/bootswatch/gh-pages/cerulean/bootstrap.css" rel="stylesheet">
+    <link href="http://twitter.github.io/bootstrap/assets/css/bootstrap.css" rel="stylesheet">
 
     <!-- Fav and touch icons -->
     <link href="http://twitter.github.io/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet">
@@ -339,19 +329,13 @@ function showPage(){
 
       <div class="footer">
         <div class="pull-left">2013 <a href='?page=contacts'>&copy; <?=$aConfig['company_name']?></a></div>
-
-	<script type="text/javascript">(function() {
- 	if (window.pluso)if (typeof window.pluso.start == "function") return; var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
-	s.type = 'text/javascript'; s.charset='UTF-8'; s.async = true; s.src = ('https:' == window.location.protocol ? 'https' : 'http')  + '://share.pluso.ru/pluso-like.js';
-	var h=d[g]('head')[0] || d[g]('body')[0];h.appendChild(s);})();
-	</script>
-	<div class="pluso pull-right" data-options="medium,square,line,horizontal,counter,theme=04" data-services="vkontakte,odnoklassniki,facebook,twitter,google,moimir,email,print" data-background="#ebebeb"></div>
+        <div class="pull-right"><?=$aConfig['social_buttons']?></div>
 
       </div>
 
     </div> <!-- /container -->
     <script>countDummy('page_<?=$currentPage?>');</script>
-    <?=$counters?>
+    <?=$aConfig['counters']?>
   </body>
 </html>
 
@@ -367,9 +351,9 @@ function showContent(){ ?>
 
       <!-- Jumbotron -->
       <div class="jumbotron">
-        <h1>Marketing stuff!</h1>
-        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-        <a class="btn btn-large btn-success" href="#">Get started today</a>
+        <h1>index.php</h1>
+	<h2>One File Twitter Bootstrap based PHP CMS</h2>
+        <a class="btn btn-large btn-success" href="https://github.com/SergeyGu/index.phpCMS">Download v0.2</a>
       </div>
 
       <hr>
@@ -378,7 +362,17 @@ function showContent(){ ?>
       <div class="row-fluid">
         <div class="span4">
           <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+        <p>
+		<ul>
+		  <li>Ony one file 25kb size!</li>
+		  <li>Twitter Bootstrap template!</li>
+		  <li>Visual setup interface!</li>
+		  <li>User Autentification!</li>
+		  <li>No MySQL need!</li>
+		  <li>Perfect for Startups!</li>
+		</ul>
+	</p>
+
           <p><a class="btn" href="#">View details &raquo;</a></p>
         </div>
         <div class="span4">
